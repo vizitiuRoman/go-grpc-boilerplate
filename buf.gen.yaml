@@ -1,0 +1,21 @@
+version: v1
+plugins:
+  - name: go-grpc
+    out: pkg/gen
+    opt: paths=source_relative
+  - name: go
+    out: pkg/gen
+    opt: paths=source_relative
+  - name: grpc-gateway
+    out: pkg/gen
+    opt:
+      - allow_delete_body=true
+      - generate_unbound_methods=true
+      - paths=source_relative
+  - name: openapiv2
+    out: pkg/gen
+    opt:
+      - allow_merge=true
+      - merge_file_name=api
+      - json_names_for_fields=true
+      - allow_delete_body=true

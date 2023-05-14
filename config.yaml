@@ -1,0 +1,31 @@
+location: ${LOCATION}
+
+logger:
+  level: ${LOGGER_LEVEL}
+  disableCaller: false
+  disableStacktrace: false
+  outputPaths: ['stderr']
+  errorOutputPaths: ['stderr']
+  encoding: ${LOGGER_ENCODING}
+  encoderConfig:
+    messageKey: "msg"
+    levelKey: "level"
+    levelEncoder: ${LOGGER_LEVEL_ENCODER}
+    nameKey: "logger"
+    timeKey: "ts"
+    callerKey: "caller"
+    stacktraceKey: "stacktrace"
+    timeEncoder: "rfc3339nano"
+    durationEncoder: "second"
+    callerEncoder: "full"
+    nameEncoder: "full"
+
+db:
+  dsn: ${DB_DSN}
+
+server:
+  grpc_port: 18080
+  http_port: 8080
+  use_tls: false
+  max_send_message_length: 54760833024
+  max_receive_message_length: 54760833024

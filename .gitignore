@@ -1,0 +1,5 @@
+/.idea/
+/.env
+/test/
+/build/
+/buf.lock

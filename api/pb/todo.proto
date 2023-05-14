@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+option go_package = ".;pb";
+
+//import "google/protobuf/duration.proto";
+//import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+service TodoSVC {
+  rpc GetTodos(GetTodosInput) returns (GetTodosOutput) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "todos";
+      summary: "Return the todos";
+      description: "Return the todos";
+    };
+    option (google.api.http) = {
+      get: "/v1/todos"
+    };
+  }
+
+  rpc GetTodo(GetTodoInput) returns (GetTodoOutput) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "todos";
+      summary: "Returns a todo";
+      description: "Returns a todo by id.";
+    };
+    option (google.api.http) = {
+      get: "/v1/todos/*"
+    };
+  }
+
+  rpc CreateTodo (CreateTodoInput) returns (CreateTodoOutput) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "todos";
+      summary: "Create a new todo";
+      description: "Create a new todo. Returns created todo.";
+    };
+    option (google.api.http) = {
+      post: "/v1/todos"
+      body: "*"
+    };
+  }
+
+  rpc UpdateTodo (UpdateTodoInput) returns (UpdateTodoOutput) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "todos";
+      summary: "Update the todo";
+      description: "Update the todo. Returns an updated todo.";
+    };
+    option (google.api.http) = {
+      put: "/v1/todos"
+      body: "*"
+    };
+  }
+
+  rpc DeleteTodo(DeleteTodoInput) returns (google.protobuf.Empty) {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      tags: "todos";
+      summary: "Delete the todo";
+      description: "Delete the todo.";
+    };
+    option (google.api.http) = {
+      delete: "/v1/todos/*"
+    };
+  }
+}
+
+message Todo {
+  string name = 1;
+  string description = 2;
+}
+
+// ----------------- GetTodos -----------------
+
+message GetTodosInput {
+}
+
+message GetTodosOutput {
+  repeated Todo todos = 1;
+}
+
+// ----------------- GetTodo -----------------
+
+message GetTodoInput {
+  int64 id = 1;
+}
+
+message GetTodoOutput {
+  Todo todo = 1;
+}
+
+
+// ----------------- CreateTodo -----------------
+
+message CreateTodoInput {
+  Todo todo = 1;
+}
+
+message CreateTodoOutput {
+  Todo todo = 1;
+}
+
+// ----------------- UpdateTodo -----------------
+
+message UpdateTodoInput {
+  Todo todo = 1;
+}
+
+message UpdateTodoOutput {
+  Todo todo = 1;
+}
+
+// ----------------- DeleteTodo -----------------
+
+message DeleteTodoInput {
+  int64 id = 1;
+}
+
+message DeleteTodoOutput {
+}
