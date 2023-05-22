@@ -31,7 +31,7 @@ type todoAdapter struct {
 
 func (t todoAdapter) FromProto(todo *pb.Todo) *model.Todo {
 	return &model.Todo{
-		ID:          1,
+		ID:          todo.Id,
 		Name:        todo.Name,
 		Description: todo.Description,
 	}
@@ -39,6 +39,7 @@ func (t todoAdapter) FromProto(todo *pb.Todo) *model.Todo {
 
 func (t todoAdapter) ToProto(todo *model.Todo) *pb.Todo {
 	return &pb.Todo{
+		Id:          todo.ID,
 		Name:        todo.Name,
 		Description: todo.Description,
 	}
@@ -49,6 +50,7 @@ func (t todoAdapter) ToProtos(todos []*model.Todo) []*pb.Todo {
 
 	for _, todo := range todos {
 		output = append(output, &pb.Todo{
+			Id:          todo.ID,
 			Name:        todo.Name,
 			Description: todo.Description,
 		})
