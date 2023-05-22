@@ -27,7 +27,7 @@ var cfg *Config
 const defaultConfigYaml = "./config.yaml"
 
 var (
-	name      = "saga-svc"
+	name      = "todo-svc"
 	version   = "undefined/local"
 	buildDate = time.Now().Format(time.RFC3339)
 )
