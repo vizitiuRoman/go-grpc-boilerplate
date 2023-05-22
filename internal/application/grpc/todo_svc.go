@@ -84,7 +84,7 @@ func (s *todoSVC) UpdateTodo(ctx context.Context, input *pb.UpdateTodoInput) (*p
 		return nil, status.Error(codes.AlreadyExists, err.Error())
 
 	case err != nil:
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 
 	default:
 		return &pb.UpdateTodoOutput{Todo: todo}, nil
@@ -99,7 +99,7 @@ func (s *todoSVC) DeleteTodo(ctx context.Context, input *pb.DeleteTodoInput) (*e
 		return nil, status.Error(codes.NotFound, err.Error())
 
 	case err != nil:
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 
 	default:
 		return &emptypb.Empty{}, nil
@@ -114,7 +114,7 @@ func (s *todoSVC) GetTodo(ctx context.Context, input *pb.GetTodoInput) (*pb.GetT
 		return nil, status.Error(codes.NotFound, err.Error())
 
 	case err != nil:
-		return nil, status.Error(codes.Internal, err.Error())
+		return nil, err
 
 	default:
 		return &pb.GetTodoOutput{Todo: todo}, nil
