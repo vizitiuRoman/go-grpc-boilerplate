@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package pb;
+option go_package = ".;pb";
+
+import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+import "protoc-gen-openapiv2/options/openapiv2.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Todo-SVC";
+    version: "1.0.0";
+  };
+  schemes: HTTP;
+  schemes: HTTPS;
+  host: "localhost:8080";
+  consumes: "application/json";
+  produces: "application/json";
+  responses: {
+    key: "403";
+    value: {description: "Returned when the user does not have permission to access the resource."}
+  }
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {type: STRING}
+      }
+    }
+  }
+  responses: {
+    key: "500";
+    value: {
+      description: "Server error";
+      schema: {
+        json_schema: {type: STRING}
+      }
+    }
+  }
+  extensions: {
+    key: "x-grpc-gateway-foo";
+    value {string_value: "bar"}
+  }
+  extensions: {
+    key: "x-grpc-gateway-baz-list";
+    value {
+      list_value: {
+        values: {string_value: "one"}
+        values: {bool_value: true}
+      }
+    }
+  }
+};
