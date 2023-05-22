@@ -15,6 +15,19 @@ services:
       todo_db:
         condition: service_healthy
 
+  todo_app:
+    ports:
+      - "8080:8080"
+      - "18080"
+    build:
+      context: ./../../
+      dockerfile: ./ops/docker/Dockerfile
+      target: application
+    volumes:
+      - ./../../:/app:rw
+    environment:
+      ENV_FILE: ./../.env
+
   todo_db:
     image: postgres:15.0
     restart: always
