@@ -1,13 +1,18 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api/pb/todo.proto",
-    "version": "1"
+    "title": "Todo-SVC",
+    "version": "1.0.0"
   },
   "tags": [
     {
       "name": "TodoSVC"
     }
+  ],
+  "host": "localhost:8080",
+  "schemes": [
+    "http",
+    "https"
   ],
   "consumes": [
     "application/json"
@@ -26,6 +31,24 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/GetTodosOutput"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "string",
+              "format": "string"
             }
           },
           "default": {
@@ -48,6 +71,24 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/CreateTodoOutput"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "string",
+              "format": "string"
             }
           },
           "default": {
@@ -80,6 +121,24 @@
             "description": "A successful response.",
             "schema": {
               "$ref": "#/definitions/UpdateTodoOutput"
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "string",
+              "format": "string"
             }
           },
           "default": {
@@ -116,6 +175,24 @@
               "$ref": "#/definitions/GetTodoOutput"
             }
           },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
           "default": {
             "description": "An unexpected error response.",
             "schema": {
@@ -146,6 +223,24 @@
             "schema": {
               "type": "object",
               "properties": {}
+            }
+          },
+          "403": {
+            "description": "Returned when the user does not have permission to access the resource.",
+            "schema": {}
+          },
+          "404": {
+            "description": "Returned when the resource does not exist.",
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "string",
+              "format": "string"
             }
           },
           "default": {
@@ -210,6 +305,10 @@
     "Todo": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
         "name": {
           "type": "string"
         },
@@ -262,5 +361,10 @@
         }
       }
     }
-  }
+  },
+  "x-grpc-gateway-baz-list": [
+    "one",
+    true
+  ],
+  "x-grpc-gateway-foo": "bar"
 }
