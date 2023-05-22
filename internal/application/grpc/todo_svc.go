@@ -121,7 +121,7 @@ func (s *todoSVC) GetTodo(ctx context.Context, input *pb.GetTodoInput) (*pb.GetT
 	}
 }
 
-func (s *todoSVC) GetTodos(ctx context.Context, input *pb.GetTodosInput) (*pb.GetTodosOutput, error) {
+func (s *todoSVC) GetTodos(ctx context.Context, _ *pb.GetTodosInput) (*pb.GetTodosOutput, error) {
 	todos, err := s.todoService.FindAll(ctx)
 	if err != nil {
 		return nil, err
