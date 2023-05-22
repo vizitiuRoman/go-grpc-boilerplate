@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	grpc_server "git.casinomodule.org/casino27/saga-svc/internal/common/adapter/server/grpc"
+	grpc_server "github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/server/grpc"
 
 	"github.com/Pallinder/go-randomdata"
 	"github.com/stretchr/testify/suite"

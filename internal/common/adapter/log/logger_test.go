@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"go.uber.org/zap"
 
-	"git.casinomodule.org/casino27/saga-svc/internal/common/adapter/log"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 )
 
 func TestLoggerSuite(t *testing.T) {
