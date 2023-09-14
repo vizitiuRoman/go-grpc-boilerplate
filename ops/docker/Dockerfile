@@ -26,7 +26,7 @@ RUN go mod download
 COPY . .
 
 RUN echo " \
-    (while true; do nodemon --exec go run cmd/main.go --signal SIGTERM || sleep 10; done) \
+    (while true; do nodemon --exec go run cmd/todo/main.go --signal SIGTERM || sleep 10; done) \
     " > /entrypoint.sh \
     && chmod +x /entrypoint.sh
 
