@@ -43,7 +43,7 @@ RUN go mod download
 # Copy the source from the current directory to the working Directory inside the container
 COPY . .
 # Build the Go app
-RUN go build -o /bin/todo ./cmd
+RUN go build -o /bin/todo ./cmd/todo
 
 # Start a new stage from scratch
 FROM alpine:latest as application

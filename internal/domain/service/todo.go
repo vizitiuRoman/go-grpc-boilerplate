@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/api/pb"
+	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 )
 
 type TodoService interface {

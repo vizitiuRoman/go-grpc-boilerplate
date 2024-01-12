@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/api/pb"
+	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 )
 
 type TodoAdapterFactory interface {

@@ -1,0 +1,48 @@
+version: '3'
+
+dotenv: [ '.env' ]
+
+vars:
+  DATABASE_USER: todo
+  DATABASE_DSN: postgres://todo:todo@todo_db:5432/todo?sslmode=disable
+
+tasks:
+  run-dev:
+    aliases: [ run ]
+    desc: runs (app, database, migration) locally with dev credentials.
+    cmds:
+      - docker-compose -f docker-compose.override.yaml -f ../ops/docker/docker-compose.yaml up -d
+    env:
+      LOCATION: remote
+      LOGGER_LEVEL: debug
+      LOGGER_ENCODING: console
+      LOGGER_LEVEL_ENCODER: lower
+      DB_DSN: postgres://todo:todo@todo_db:5432/todo?sslmode=disable
+
+  buf-format:
+    desc: format *.proto files.
+    cmds:
+      - buf format -w
+
+  buf-generate:
+    desc: generates artifacts from *.proto files.
+    cmds:
+      - buf generate
+    generates:
+      - "pkg/gen/todo"
+
+  buf-mod-update:
+    desc: generates artifacts from *.proto files.
+    cmds:
+      - buf mod update
+    generates:
+      - "pkg/gen/todo"
+
+  sqlboiler-generate:
+    desc: generates sqlboiler models.
+    cmds:
+      - sqlboiler -- sqlboiler psql
+    requires:
+      vars: [ DATABASE_PASSWORD ]
+    generates:
+      - "pkg/gen/sqlboiler"

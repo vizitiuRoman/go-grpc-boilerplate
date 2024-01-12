@@ -9,7 +9,7 @@ import (
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/server/grpc"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/service"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/api/pb"
+	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

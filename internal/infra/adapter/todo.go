@@ -6,7 +6,7 @@ import (
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/api/pb"
+	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 )
 
 type todoAdapterFactory struct {

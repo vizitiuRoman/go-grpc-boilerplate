@@ -8,7 +8,7 @@ import (
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/repo"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/service"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/api/pb"
+	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 	"go.uber.org/zap"
 )
 
