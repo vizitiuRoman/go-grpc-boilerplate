@@ -6,18 +6,25 @@ import (
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/repo"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/sqlboiler/tododb"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"go.uber.org/zap"
 )
 
 type todoRepoFactory struct {
 	logger log.Logger
+
+	todoAdapterFactory adapter.TodoAdapterFactory
 }
 
-func NewTodoRepoFactory(logger log.Logger) repo.TodoRepoFactory {
+func NewTodoRepoFactory(logger log.Logger, todoAdapterFactory adapter.TodoAdapterFactory) repo.TodoRepoFactory {
 	return &todoRepoFactory{
 		logger: logger,
+
+		todoAdapterFactory: todoAdapterFactory,
 	}
 }
 
@@ -25,106 +32,76 @@ func (f *todoRepoFactory) Create(ctx context.Context, db db.DB) repo.TodoRepo {
 	return &todoRepo{
 		logger: f.logger.WithComponent(ctx, "TodoRepo"),
 		db:     db,
+
+		todoAdapter: f.todoAdapterFactory.Create(ctx),
 	}
 }
 
 type todoRepo struct {
 	logger log.Logger
 	db     db.DB
+
+	todoAdapter adapter.TodoAdapter
 }
 
 func (r *todoRepo) Find(ctx context.Context, id int64) (*model.Todo, error) {
-	const q = `SELECT id, name, description FROM todo WHERE id = $1`
-
-	var todo model.Todo
-	row := r.db.QueryRowContext(ctx, q, id)
-	err := wrapErrNoRows(row.Scan(&todo.ID, &todo.Name, &todo.Description))
+	ent, err := tododb.Todos(tododb.TodoWhere.ID.EQ(int(id))).One(ctx, r.db)
 	if err != nil {
-		r.logger.WithMethod(ctx, "Find").Error("query error", zap.Error(err))
+		r.logger.WithMethod(ctx, "Find").Error("execute query", zap.Error(err))
 		return nil, err
 	}
 
-	return &todo, err
+	return r.todoAdapter.FromEntity(ent), nil
 }
 
 func (r *todoRepo) FindAll(ctx context.Context) ([]*model.Todo, error) {
-	logger := r.logger.WithMethod(ctx, "FindAll")
-
-	const q = `SELECT id, name, description FROM todo`
-
-	todos := make([]*model.Todo, 0)
-
-	rows, err := r.db.QueryContext(ctx, q)
+	ent, err := tododb.Todos().All(ctx, r.db)
 	if err != nil {
-		logger.Error("query error", zap.Error(err))
+		r.logger.WithMethod(ctx, "FindAll").Error("execute query", zap.Error(err))
 		return nil, err
 	}
-	if err = rows.Err(); err != nil {
-		logger.Error("reading error", zap.Error(err))
-		return nil, err
-	}
-	defer rows.Close()
 
-	for rows.Next() {
-		todo := model.Todo{}
-		if err = rows.Scan(&todo.ID, &todo.Name, &todo.Description); err != nil {
-			logger.Error("scan error", zap.Error(err))
-			return nil, err
-		}
-		todos = append(todos, &todo)
-	}
-
-	return todos, err
+	return r.todoAdapter.FromEntities(ent), nil
 }
 
 func (r *todoRepo) Create(ctx context.Context, input *model.Todo) (*model.Todo, error) {
-	const q = `INSERT INTO todo (name, description) VALUES ($1, $2) RETURNING id, name, description`
+	ent := r.todoAdapter.ToEntity(input)
 
-	var todo model.Todo
-
-	row := r.db.QueryRowContext(ctx, q, input.Name, input.Description)
-	if err := wrapUniqueViolation(row.Scan(&todo.ID, &todo.Name, &todo.Description)); err != nil {
-		r.logger.WithMethod(ctx, "Create").Error("insert todo", zap.Error(err))
+	err := ent.Insert(ctx, r.db, boil.Blacklist(tododb.TodoColumns.ID))
+	if err != nil {
+		r.logger.WithMethod(ctx, "Create").Error("execute query", zap.Error(err))
 		return nil, err
 	}
 
-	return &todo, nil
+	return r.todoAdapter.FromEntity(ent), nil
 }
 
 func (r *todoRepo) Update(ctx context.Context, input *model.Todo) (*model.Todo, error) {
-	const q = `
-		UPDATE todo
-		SET name = $1,
-		    description = $2
-		WHERE id = $3
-		RETURNING id, name, description
-	`
+	ent := r.todoAdapter.ToEntity(input)
 
-	var todo model.Todo
-
-	row := r.db.QueryRowContext(ctx, q, input.Name, input.Description, input.ID)
-	if err := wrapErrNoRows(row.Scan(&todo.ID, &todo.Name, &todo.Description)); err != nil {
-		r.logger.WithMethod(ctx, "Update").Error("update todo", zap.Error(err))
+	rowsAff, err := ent.Update(ctx, r.db, boil.Infer())
+	if err != nil {
+		r.logger.WithMethod(ctx, "Update").Error("failed to update saga", zap.Error(err))
 		return nil, err
 	}
+	if rowsAff != 1 {
+		r.logger.WithMethod(ctx, "Update").Error("no rows affected", zap.Error(domain.ErrNotFound))
+		return nil, domain.ErrNotFound
+	}
 
-	return &todo, nil
+	return r.todoAdapter.FromEntity(ent), nil
 }
 
 func (r *todoRepo) Delete(ctx context.Context, id int64) error {
-	const q = `DELETE FROM todo WHERE id = $1`
-
-	rows, err := r.db.ExecContext(ctx, q, id)
+	rowsAff, err := tododb.Todos(tododb.TodoWhere.ID.EQ(int(id))).DeleteAll(ctx, r.db)
 	if err != nil {
-		r.logger.WithMethod(ctx, "Delete").Error("query error", zap.Error(err))
+		r.logger.WithMethod(ctx, "Delete").Error("failed to delete todo", zap.Error(err))
 		return err
 	}
-
-	count, _ := rows.RowsAffected()
-	if count == 0 {
-		r.logger.WithMethod(ctx, "Delete").Error("no rows affected", zap.Error(domain.ErrNotFound))
+	if rowsAff == 0 {
+		r.logger.WithMethod(ctx, "Delete").Error("failed to delete todo", zap.Error(domain.ErrNotFound))
 		return domain.ErrNotFound
 	}
 
-	return err
+	return nil
 }

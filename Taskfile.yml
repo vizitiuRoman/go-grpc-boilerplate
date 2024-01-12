@@ -19,6 +19,12 @@ tasks:
       LOGGER_LEVEL_ENCODER: lower
       DB_DSN: postgres://todo:todo@todo_db:5432/todo?sslmode=disable
 
+  generate-ent:
+    desc: generate entities
+    cmds:
+      - sqlboiler psql --no-tests -d -o pkg/gen/sqlboiler/tododb -c sqlboiler.toml
+
+
   buf-format:
     desc: format *.proto files.
     cmds:

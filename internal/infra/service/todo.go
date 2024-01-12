@@ -6,6 +6,7 @@ import (
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/repo"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/service"
 	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
@@ -38,8 +39,7 @@ func NewTodoService(
 	}
 }
 
-func (s *todoService) Find(ctx context.Context, id int64) (*pb.Todo, error) {
-	todoAdapter := s.todoAdapterFactory.Create(ctx)
+func (s *todoService) Find(ctx context.Context, id int64) (*model.Todo, error) {
 	todoRepo := s.todoRepoFactory.Create(ctx, s.db)
 
 	todo, err := todoRepo.Find(ctx, id)
@@ -48,17 +48,16 @@ func (s *todoService) Find(ctx context.Context, id int64) (*pb.Todo, error) {
 			WithMethod(ctx, "Find").
 			Error(
 				"cannot find todo by id",
-				zap.String("id", string(id)),
+				zap.Int64("id", id),
 				zap.Error(err),
 			)
 		return nil, err
 	}
 
-	return todoAdapter.ToProto(todo), nil
+	return todo, nil
 }
 
-func (s *todoService) FindAll(ctx context.Context) ([]*pb.Todo, error) {
-	todoAdapter := s.todoAdapterFactory.Create(ctx)
+func (s *todoService) FindAll(ctx context.Context) ([]*model.Todo, error) {
 	todoRepo := s.todoRepoFactory.Create(ctx, s.db)
 
 	todos, err := todoRepo.FindAll(ctx)
@@ -72,10 +71,10 @@ func (s *todoService) FindAll(ctx context.Context) ([]*pb.Todo, error) {
 		return nil, err
 	}
 
-	return todoAdapter.ToProtos(todos), nil
+	return todos, nil
 }
 
-func (s *todoService) Create(ctx context.Context, input *pb.CreateTodoInput) (*pb.Todo, error) {
+func (s *todoService) Create(ctx context.Context, input *pb.CreateTodoInput) (*model.Todo, error) {
 	todoAdapter := s.todoAdapterFactory.Create(ctx)
 	todoRepo := s.todoRepoFactory.Create(ctx, s.db)
 
@@ -90,10 +89,10 @@ func (s *todoService) Create(ctx context.Context, input *pb.CreateTodoInput) (*p
 		return nil, err
 	}
 
-	return todoAdapter.ToProto(todo), nil
+	return todo, nil
 }
 
-func (s *todoService) Update(ctx context.Context, input *pb.UpdateTodoInput) (*pb.Todo, error) {
+func (s *todoService) Update(ctx context.Context, input *pb.UpdateTodoInput) (*model.Todo, error) {
 	todoAdapter := s.todoAdapterFactory.Create(ctx)
 	todoRepo := s.todoRepoFactory.Create(ctx, s.db)
 
@@ -108,7 +107,7 @@ func (s *todoService) Update(ctx context.Context, input *pb.UpdateTodoInput) (*p
 		return nil, err
 	}
 
-	return todoAdapter.ToProto(todo), nil
+	return todo, nil
 }
 
 func (s *todoService) Delete(ctx context.Context, id int64) error {

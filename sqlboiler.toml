@@ -1,0 +1,21 @@
+output   = "tododb"
+pkgname  = "tododb"
+wipe     = true
+no-tests = false
+add-enum-types = true
+
+[psql]
+  host    = "localhost"
+  port    = 5490
+  dbname  = "todo"
+  schema  = "public"
+  user    = "todo"
+  pass    = "todo"
+  sslmode = "disable"
+  blacklist = ["schema_migrations"]
+
+#[[types]]
+#  [types.match]
+#  type = "int"
+#  [types.replace]
+#  type = "int64"
