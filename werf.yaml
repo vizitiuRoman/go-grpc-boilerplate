@@ -41,7 +41,7 @@ shell:
     - go mod download
   beforeSetup:
     - cd /app
-    - CGO_ENABLED=0 go build -ldflags="-w -s" -o bin/{{ $projectName }} cmd/{{ $projectName }}/*.go
+    - CGO_ENABLED=0 go build -ldflags="-w -s" -o bin/{{ $projectName }} cmd/*.go
 git:
   - add: /
     to: /app
