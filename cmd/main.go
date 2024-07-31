@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	app_grpc "github.com/vizitiuRoman/go-grpc-boilerplate/internal/application/grpc"
+	app_grpc "github.com/vizitiuRoman/go-grpc-boilerplate/internal/app/grpc"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/config"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/server/grpc"

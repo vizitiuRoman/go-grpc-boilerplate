@@ -3,12 +3,12 @@ package repo
 import (
 	"context"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/pgclient"
 )
 
 type TodoRepoFactory interface {
-	Create(context.Context, db.DB) TodoRepo
+	Create(context.Context, pgclient.DB) TodoRepo
 }
 
 type TodoRepo interface {

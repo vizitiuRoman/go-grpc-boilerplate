@@ -20,9 +20,9 @@ services:
       - "8080:8080"
       - "18080"
     build:
-      context: ./../../
-      dockerfile: ./ops/docker/Dockerfile
-      target: application
+      context: ../..
+      dockerfile: Dockerfile
+      target: app
     volumes:
       - ./../../:/app:rw
     environment:

@@ -14,7 +14,7 @@ version: "3.8"
 services:
   todo_app:
     build:
-      target: application-dev
+      target: app-dev
     environment:
       ENV_FILE: ./.env
 ```

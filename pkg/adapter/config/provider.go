@@ -3,8 +3,7 @@ package config
 import (
 	"os"
 
-	"github.com/joho/godotenv"
-	"go.uber.org/config"
+	core "go.uber.org/config"
 )
 
 type Provider interface {
@@ -12,25 +11,15 @@ type Provider interface {
 	PopulateByKey(string, any) error
 }
 
-const defaultEnv = "./.env"
-
-func NewProviderByOptions(options ...config.YAMLOption) (Provider, error) {
-	envFile := os.Getenv("ENV_FILE")
-	if envFile == "" {
-		envFile = defaultEnv
-	}
-
-	dotenvFile, err := godotenv.Read(envFile)
+func newProvider(options *configOptions) (Provider, error) {
+	dotenvFile, err := options.localENV()
 	if err != nil {
 		return nil, err
 	}
 
-	configProvider, err := config.NewYAML(append(
-		[]config.YAMLOption{
-			config.Expand(lookupFunc(dotenvFile)),
-		},
-		options...,
-	)...)
+	configProvider, err := core.NewYAML(
+		core.File(options.getYamlConfigPath()),
+		core.Expand(lookupFunc(dotenvFile)))
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +38,7 @@ func lookupFunc(extraEnv map[string]string) func(key string) (val string, ok boo
 }
 
 type ymlProvider struct {
-	provider config.Provider
+	provider core.Provider
 }
 
 func (p *ymlProvider) Populate(target any) error {

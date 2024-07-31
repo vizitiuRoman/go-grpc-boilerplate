@@ -3,19 +3,19 @@ package service
 import (
 	"context"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/repo"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/service"
+	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/pgclient"
 	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 	"go.uber.org/zap"
 )
 
 type todoService struct {
 	logger log.Logger
-	db     db.DB
+	db     pgclient.DB
 
 	todoAdapterFactory adapter.TodoAdapterFactory
 	todoRepoFactory    repo.TodoRepoFactory
@@ -24,7 +24,7 @@ type todoService struct {
 func NewTodoService(
 	ctx context.Context,
 	logger log.Logger,
-	db db.DB,
+	db pgclient.DB,
 
 	todoAdapterFactory adapter.TodoAdapterFactory,
 	todoRepoFactory repo.TodoRepoFactory,
@@ -92,6 +92,7 @@ func (s *todoService) Create(ctx context.Context, input *pb.CreateTodoInput) (*m
 	return todo, nil
 }
 
+// Update --> @TODO --> return error when todo is created with the same ID
 func (s *todoService) Update(ctx context.Context, input *pb.UpdateTodoInput) (*model.Todo, error) {
 	todoAdapter := s.todoAdapterFactory.Create(ctx)
 	todoRepo := s.todoRepoFactory.Create(ctx, s.db)

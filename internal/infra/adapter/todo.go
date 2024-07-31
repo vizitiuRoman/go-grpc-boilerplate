@@ -3,9 +3,9 @@ package adapter
 import (
 	"context"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
+	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/sqlboiler/tododb"
 	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 )

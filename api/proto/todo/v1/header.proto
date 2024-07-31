@@ -15,8 +15,8 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: HTTP;
   schemes: HTTPS;
   host: "localhost:8080";
-  consumes: "application/json";
-  produces: "application/json";
+  consumes: "app/json";
+  produces: "app/json";
   responses: {
     key: "403";
     value: {description: "Returned when the user does not have permission to access the resource."}

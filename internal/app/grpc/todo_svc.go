@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/server/grpc"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/service"
+	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/pgclient"
 	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -20,7 +20,7 @@ type todoSVC struct {
 	pb.UnimplementedTodoSVCServer
 	ctx    context.Context
 	logger log.Logger
-	db     db.DB
+	db     pgclient.DB
 
 	todoAdapterFactory adapter.TodoAdapterFactory
 
@@ -30,7 +30,7 @@ type todoSVC struct {
 func NewTodoSVCServerDescriptor(
 	ctx context.Context,
 	logger log.Logger,
-	db db.DB,
+	db pgclient.DB,
 
 	todoAdapterFactory adapter.TodoAdapterFactory,
 

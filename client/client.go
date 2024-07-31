@@ -4,17 +4,22 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
+	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
 	todov1 "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/todo/v1"
 	pb "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 )
 
 func main() {
-	logger := log.MustDefaultConsoleLogger("debug")
+	logger, err := log.NewLogger(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	ctx := context.Background()
 
 	client, err := todov1.NewTodoSVCClient(
-		context.Background(),
-		logger,
+		ctx,
+		logger.WithComponent(ctx, "todo-svc-client"),
 		&todov1.Config{
 			Host:     "localhost",
 			GrpcPort: 3774,

@@ -3,12 +3,12 @@ package repo
 import (
 	"context"
 
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/db"
-	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/adapter"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/model"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/domain/repo"
+	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/pgclient"
 	"github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/sqlboiler/tododb"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"go.uber.org/zap"
@@ -28,7 +28,7 @@ func NewTodoRepoFactory(logger log.Logger, todoAdapterFactory adapter.TodoAdapte
 	}
 }
 
-func (f *todoRepoFactory) Create(ctx context.Context, db db.DB) repo.TodoRepo {
+func (f *todoRepoFactory) Create(ctx context.Context, db pgclient.DB) repo.TodoRepo {
 	return &todoRepo{
 		logger: f.logger.WithComponent(ctx, "TodoRepo"),
 		db:     db,
@@ -39,7 +39,7 @@ func (f *todoRepoFactory) Create(ctx context.Context, db db.DB) repo.TodoRepo {
 
 type todoRepo struct {
 	logger log.Logger
-	db     db.DB
+	db     pgclient.DB
 
 	todoAdapter adapter.TodoAdapter
 }
