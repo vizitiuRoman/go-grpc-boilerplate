@@ -1,0 +1,11 @@
+config:
+  goTemplateRendering:
+    allowEnvVariables:
+    - CI_JOB_STARTED_AT
+  stapel:
+    mount:
+      allowBuildDir: true
+giterminismConfigVersion: 1
+helm:
+  allowUncommittedFiles:
+  - .helm/Chart.lock

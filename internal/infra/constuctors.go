@@ -10,7 +10,7 @@ import (
 var Constructors = fx.Provide(
 	repo.NewTodoRepoFactory,
 
-	adapter.NewTodoAdapterFactory,
+	adapter.NewTodoAdapter,
 
 	service.NewTodoService,
 )
