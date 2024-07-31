@@ -75,7 +75,7 @@ tasks:
   build:
     desc: build werf image.
     cmds:
-      - werf build NOCACHE=t
+      - werf build
 
   coverage:
     cmds:
