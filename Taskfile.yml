@@ -37,7 +37,7 @@ tasks:
   generate-ent:
     desc: generate entities
     cmds:
-      - sqlboiler psql --no-tests -d -o pkg/gen/sqlboiler/tododb -c sqlboiler.toml
+      - sqlboiler psql --no-tests -d -o pkg/gen/sqlboiler/tododb -c .sqlboiler.toml
 
   buf-format:
     desc: format *.proto files.
@@ -90,4 +90,3 @@ tasks:
     cmds:
       - find {{.PROJECT_DIR}} -path '*/mocks' -exec rm -rf {} +
       - go generate ./...
-
