@@ -16,14 +16,18 @@ import (
 func main() {
 	app := fx.New(
 		fx.Provide(func() context.Context { return context.Background() }),
+
 		fx.StartTimeout(time.Second*3),
 		fx.StopTimeout(time.Second*10),
+
 		adapter.Constructors,
 		infra.Constructors,
 
 		fx.Provide(runtime.NewServeMux),
 		fx.Provide(grpc.NewGRPC),
+
 		fx.Provide(func(cfg *config.Config) *grpc.Config { return cfg.Server }),
+
 		fx.Provide(app_grpc.NewTodoSVCServerDescriptor),
 		fx.Invoke(newTodoServer),
 	)
