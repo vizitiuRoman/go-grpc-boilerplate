@@ -1,6 +1,6 @@
 module github.com/vizitiuRoman/go-grpc-boilerplate
 
-go 1.21
+go 1.23.2
 
 require (
 	github.com/Pallinder/go-randomdata v1.2.0
@@ -8,7 +8,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/joho/godotenv v1.5.1
-	github.com/lib/pq v1.10.9
 	github.com/stretchr/testify v1.8.1
 	github.com/volatiletech/sqlboiler/v4 v4.15.0
 	github.com/volatiletech/strmangle v0.0.6

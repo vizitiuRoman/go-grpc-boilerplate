@@ -34,7 +34,7 @@ shell:
 ---
 
 image: binary
-from: golang:1.21-alpine
+from: golang:1.23.2-alpine
 shell:
   install:
     - cd /app
@@ -66,4 +66,3 @@ import:
     to: /usr/local/bin/{{ $projectName }}
     after: setup
 ---
-

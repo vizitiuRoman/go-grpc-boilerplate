@@ -4,17 +4,6 @@ volumes:
   todo_vol:
 
 services:
-
-  todo_migrate:
-    restart: on-failure
-    image: migrate/migrate
-    volumes:
-      - ../../migrations:/migrations
-    command: [ "-path", "/migrations", "-database",  "postgres://todo:todo@todo_db:5432/todo?sslmode=disable", "up" ]
-    depends_on:
-      todo_db:
-        condition: service_healthy
-
   todo_app:
     ports:
       - "8080:8080"
