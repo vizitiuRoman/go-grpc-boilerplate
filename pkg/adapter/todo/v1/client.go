@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	todov1 "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/gen/todo/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -38,7 +38,7 @@ func NewTodoSVCClient(
 
 	f := &todoSVCFactory{
 		ctx:    ctx,
-		logger: logger,
+		logger: logger.Named("todo-svc-client"),
 		opts:   defaultDialOptions,
 		cfg:    cfg,
 		conns:  make(map[string]*grpc.ClientConn),
@@ -74,7 +74,7 @@ func (f *todoSVCFactory) createConnection(target string) (*grpc.ClientConn, erro
 		return f.conns[target], nil
 	}
 
-	conn, err := grpc.NewClient(target, f.opts...)
+	conn, err := grpc.Dial(target, f.opts...)
 	if err != nil {
 		f.logger.WithMethod(f.ctx, "createConnection").Error("unable to create client connection", zap.Error(err))
 		return nil, err

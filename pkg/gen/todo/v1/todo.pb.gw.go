@@ -89,7 +89,11 @@ func request_TodoSVC_CreateTodo_0(ctx context.Context, marshaler runtime.Marshal
 	var protoReq CreateTodoInput
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -102,7 +106,11 @@ func local_request_TodoSVC_CreateTodo_0(ctx context.Context, marshaler runtime.M
 	var protoReq CreateTodoInput
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -115,7 +123,11 @@ func request_TodoSVC_UpdateTodo_0(ctx context.Context, marshaler runtime.Marshal
 	var protoReq UpdateTodoInput
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -128,7 +140,11 @@ func local_request_TodoSVC_UpdateTodo_0(ctx context.Context, marshaler runtime.M
 	var protoReq UpdateTodoInput
 	var metadata runtime.ServerMetadata
 
-	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && err != io.EOF {
+	newReader, berr := utilities.IOReaderFactory(req.Body)
+	if berr != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
+	}
+	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
@@ -177,7 +193,6 @@ func local_request_TodoSVC_DeleteTodo_0(ctx context.Context, marshaler runtime.M
 // UnaryRPC     :call TodoSVCServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterTodoSVCHandlerFromEndpoint instead.
-// GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
 func RegisterTodoSVCHandlerServer(ctx context.Context, mux *runtime.ServeMux, server TodoSVCServer) error {
 
 	mux.Handle("GET", pattern_TodoSVC_GetTodos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
@@ -311,21 +326,21 @@ func RegisterTodoSVCHandlerServer(ctx context.Context, mux *runtime.ServeMux, se
 // RegisterTodoSVCHandlerFromEndpoint is same as RegisterTodoSVCHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
 func RegisterTodoSVCHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
-	conn, err := grpc.NewClient(endpoint, opts...)
+	conn, err := grpc.DialContext(ctx, endpoint, opts...)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		if err != nil {
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 			return
 		}
 		go func() {
 			<-ctx.Done()
 			if cerr := conn.Close(); cerr != nil {
-				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
+				grpclog.Infof("Failed to close conn to %s: %v", endpoint, cerr)
 			}
 		}()
 	}()
@@ -343,7 +358,7 @@ func RegisterTodoSVCHandler(ctx context.Context, mux *runtime.ServeMux, conn *gr
 // to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "TodoSVCClient".
 // Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "TodoSVCClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "TodoSVCClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+// "TodoSVCClient" to call the correct interceptors.
 func RegisterTodoSVCHandlerClient(ctx context.Context, mux *runtime.ServeMux, client TodoSVCClient) error {
 
 	mux.Handle("GET", pattern_TodoSVC_GetTodos_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {

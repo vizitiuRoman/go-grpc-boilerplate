@@ -3,25 +3,10 @@ version: '3'
 dotenv: [ '.env' ]
 
 vars:
-  PROJECT_DIR:
-    sh:
-      pwd
   DATABASE_USER: todo
   DATABASE_DSN: postgres://todo:todo@todo_db:5432/todo?sslmode=disable
-  MIGRATIONS_DIR: ./var/migrations
 
 tasks:
-  migrate-up:
-    desc: runs migrations.
-    silent: true
-    cmds:
-      - werf run --docker-options="-v `pwd`/:/app -w /app" --dev goose -- goose -dir {{ .MIGRATIONS_DIR }} postgres {{ .PG_DSN }} up
-
-  migrate-down:
-    desc: revert migrations.
-    cmds:
-      - werf run --docker-options="-v `pwd`/:/app -w /app" --dev goose -- goose -dir {{ .MIGRATIONS_DIR }} postgres {{ .PG_DSN }} down
-
   run-dev:
     aliases: [ run ]
     desc: runs (app, database, migration) locally with dev credentials.
@@ -37,7 +22,8 @@ tasks:
   generate-ent:
     desc: generate entities
     cmds:
-      - sqlboiler psql --no-tests -d -o pkg/gen/sqlboiler/tododb -c .sqlboiler.toml
+      - sqlboiler psql --no-tests -d -o pkg/gen/sqlboiler/tododb -c sqlboiler.toml
+
 
   buf-format:
     desc: format *.proto files.
@@ -66,27 +52,3 @@ tasks:
       vars: [ DATABASE_PASSWORD ]
     generates:
       - "pkg/gen/sqlboiler"
-
-  lint:
-    desc: lints the project.
-    cmds:
-      - werf run --docker-options="-v `pwd`/:/app -w /app" --dev golangci-lint -- golangci-lint run -v
-
-  build:
-    desc: build werf image.
-    cmds:
-      - werf build
-
-  coverage:
-    cmds:
-      - go clean -testcache
-      - go test -v ./... -coverprofile={{.PROJECT_DIR}}/cover.tmp.out -failfast -race
-      - cat {{.PROJECT_DIR}}/cover.tmp.out | grep -v "mock_" > {{.PROJECT_DIR}}/cover.out
-      - go tool cover -html={{.PROJECT_DIR}}/cover.out -o {{.PROJECT_DIR}}/cover.html
-      - rm {{.PROJECT_DIR}}/cover.tmp.out {{.PROJECT_DIR}}/cover.out
-
-  mocks:
-    desc: Generate mocks (see https://github.com/vektra/mockery).
-    cmds:
-      - find {{.PROJECT_DIR}} -path '*/mocks' -exec rm -rf {} +
-      - go generate ./...

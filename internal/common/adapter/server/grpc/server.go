@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	gateway "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	log "github.com/vizitiuRoman/go-grpc-boilerplate/pkg/adapter/logger"
+	"github.com/vizitiuRoman/go-grpc-boilerplate/internal/common/adapter/log"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

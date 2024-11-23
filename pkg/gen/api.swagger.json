@@ -15,10 +15,10 @@
     "https"
   ],
   "consumes": [
-    "app/json"
+    "application/json"
   ],
   "produces": [
-    "app/json"
+    "application/json"
   ],
   "paths": {
     "/v1/todos": {
