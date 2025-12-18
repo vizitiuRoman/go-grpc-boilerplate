@@ -34,7 +34,7 @@ shell:
 ---
 
 image: binary
-from: golang:1.23.2-alpine
+from: golang:1.24.2-alpine
 shell:
   install:
     - cd /app
