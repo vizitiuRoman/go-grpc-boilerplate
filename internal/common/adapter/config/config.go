@@ -15,12 +15,11 @@ type Config struct {
 	BuildDate string `yaml:"build_date"`
 
 	Logger *log.Config      `yaml:"logger"`
-	DB     *pgclient.Config `yaml:"pgclient"`
+	DB     *pgclient.Config `yaml:"db"`
 	Server *grpc.Config     `yaml:"server"`
 }
 
-var cfg *Config
-
 func NewConfig() (*Config, error) {
+	cfg := &Config{}
 	return cfg, config.PopulateConfig(cfg)
 }
