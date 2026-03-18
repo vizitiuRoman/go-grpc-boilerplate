@@ -24,7 +24,7 @@ type todoSVC struct {
 
 	adapter *adapter.TodoAdapter
 
-	todoService service.TodoService
+	todoService *service.TodoService
 }
 
 func NewTodoSVCServerDescriptor(
@@ -34,7 +34,7 @@ func NewTodoSVCServerDescriptor(
 
 	adapter *adapter.TodoAdapter,
 
-	todoService service.TodoService,
+	todoService *service.TodoService,
 ) *grpc.ServerDescriptor {
 	server := &todoSVC{
 		ctx: ctx,
